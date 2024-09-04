@@ -881,6 +881,8 @@ module AnnotateModels
       attrs << 'not null' unless column.null
       attrs << 'primary key' if klass.primary_key && (klass.primary_key.is_a?(Array) ? klass.primary_key.collect(&:to_sym).include?(column.name.to_sym) : column.name.to_sym == klass.primary_key.to_sym)
 
+      column_type = column_type.dup if column_type.frozen?
+
       if column_type == 'decimal'
         column_type << "(#{column.precision}, #{column.scale})"
       elsif !%w[spatial geometry geography].include?(column_type)
